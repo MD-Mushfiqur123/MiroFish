@@ -125,6 +125,10 @@ LLM_MODEL_NAME=qwen-plus
 # Zep Cloud Configuration
 # Free monthly quota is sufficient for simple usage: https://app.getzep.com/
 ZEP_API_KEY=your_zep_api_key
+
+# Frontend API URL (required for remote/VPS deployment)
+# Defaults to http://localhost:5001; set to the public backend URL when deploying to a remote server
+# VITE_API_BASE_URL=http://your-server-ip:5001
 ```
 
 #### 2. Install Dependencies
