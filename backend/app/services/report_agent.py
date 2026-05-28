@@ -1308,6 +1308,10 @@ class ReportAgent:
                 max_tokens=4096
             )
 
+            # 剥离模型幻觉产生的 <tool_result> 块，防止模型模拟工具返回结果
+            if response:
+                response = re.sub(r'<tool_result>.*?</tool_result>', '', response, flags=re.DOTALL)
+
             # 检查 LLM 返回是否为 None（API 异常或内容为空）
             if response is None:
                 logger.warning(t('report.sectionIterNone', title=section.title, iteration=iteration + 1))
@@ -1829,7 +1833,11 @@ class ReportAgent:
                 messages=messages,
                 temperature=0.5
             )
-            
+
+            # 剥离模型幻觉产生的 <tool_result> 块
+            if response:
+                response = re.sub(r'<tool_result>.*?</tool_result>', '', response, flags=re.DOTALL)
+
             # 解析工具调用
             tool_calls = self._parse_tool_calls(response)
             
@@ -1869,7 +1877,11 @@ class ReportAgent:
             messages=messages,
             temperature=0.5
         )
-        
+
+        # 剥离模型幻觉产生的 <tool_result> 块
+        if final_response:
+            final_response = re.sub(r'<tool_result>.*?</tool_result>', '', final_response, flags=re.DOTALL)
+
         # 清理响应
         clean_response = re.sub(r'<tool_call>.*?</tool_call>', '', final_response, flags=re.DOTALL)
         clean_response = re.sub(r'\[TOOL_CALL\].*?\)', '', clean_response)
